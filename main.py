@@ -3,6 +3,7 @@ import time
 import threading
 import datetime
 import re
+import os
 from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__)
@@ -10,6 +11,7 @@ app = Flask(__name__)
 # Global variables for tracking
 logs = []
 bot_running = True
+total_sent = 0
 
 def add_log(category, message, status="info"):
     now = datetime.datetime.now().strftime("%H:%M:%S")
@@ -35,8 +37,8 @@ def get_fb_tokens(cookie):
     except:
         return None, None
 
-# Logic for Single and Multi Messaging
-def send_messages_logic(target_id, hater_name, cookies, messages, delay):
+def send_logic(target_id, hater_name, cookies, messages, delay):
+    global total_sent, bot_running
     msg_list = messages.splitlines()
     cookie_list = cookies.splitlines()
     
@@ -47,7 +49,7 @@ def send_messages_logic(target_id, hater_name, cookies, messages, delay):
             fb_dtsg, jazoest = get_fb_tokens(current_cookie)
             
             if not fb_dtsg:
-                add_log("Messaging", "Invalid Cookie detected", "error")
+                add_log("System", "Invalid Cookie detected", "error")
                 continue
 
             url = f"https://m.facebook.com/messages/send/?icm=1&tids=cid.c.{target_id}"
@@ -63,9 +65,10 @@ def send_messages_logic(target_id, hater_name, cookies, messages, delay):
             try:
                 response = requests.post(url, data=payload, headers=headers)
                 if response.status_code == 200:
-                    add_log("Messaging", f"Sent: {msg[:20]}...", "success")
+                    total_sent += 1
+                    add_log("Messaging", f"Sent: {msg[:15]}...", "success")
                 else:
-                    add_log("Messaging", "Failed to send message", "error")
+                    add_log("Messaging", "Failed to send", "error")
             except:
                 add_log("Messaging", "Network Error", "error")
             
@@ -73,7 +76,6 @@ def send_messages_logic(target_id, hater_name, cookies, messages, delay):
 
 @app.route('/')
 def index():
-    # Make sure index.html is in a folder named 'templates'
     return render_template('index.html')
 
 @app.route('/api/stats')
@@ -81,27 +83,31 @@ def get_stats():
     return jsonify({
         "success": True,
         "activeSessions": 1 if bot_running else 0,
-        "totalMessages": len(logs),
+        "totalMessages": total_sent,
         "availableSlots": 5
     })
 
 @app.route('/api/messages/single', methods=['POST'])
 def single_message():
     data = request.json
-    thread = threading.Thread(target=send_messages_logic, args=(
+    thread = threading.Thread(target=send_logic, args=(
         data['targetId'], data['haterName'], data['cookie'], data['messageFile'], data['delay']
     ))
+    thread.daemon = True
     thread.start()
     return jsonify({"success": True, "message": "Single Messaging Started"})
 
 @app.route('/api/messages/multi', methods=['POST'])
 def multi_message():
     data = request.json
-    thread = threading.Thread(target=send_messages_logic, args=(
+    thread = threading.Thread(target=send_logic, args=(
         data['targetId'], data['haterName'], data['cookies'], data['messageFile'], data['delay']
     ))
+    thread.daemon = True
     thread.start()
     return jsonify({"success": True, "message": "Multi Messaging Started"})
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
+
