@@ -1,28 +1,15 @@
-import requests
+import os
 import time
 import threading
-import datetime
+import requests
 import re
-import os
 from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__)
 
-# Global variables for tracking
-logs = []
+# Global variables
 bot_running = True
 total_sent = 0
-
-def add_log(category, message, status="info"):
-    now = datetime.datetime.now().strftime("%H:%M:%S")
-    log_entry = {
-        "time": now,
-        "category": category,
-        "message": message,
-        "status": status
-    }
-    logs.append(log_entry)
-    if len(logs) > 50: logs.pop(0)
 
 def get_fb_tokens(cookie):
     try:
@@ -48,12 +35,9 @@ def send_logic(target_id, hater_name, cookies, messages, delay):
             current_cookie = cookie_list[i % len(cookie_list)].strip()
             fb_dtsg, jazoest = get_fb_tokens(current_cookie)
             
-            if not fb_dtsg:
-                add_log("System", "Invalid Cookie detected", "error")
-                continue
+            if not fb_dtsg: continue
 
             url = f"https://m.facebook.com/messages/send/?icm=1&tids=cid.c.{target_id}"
-            headers = {'cookie': current_cookie, 'user-agent': 'Mozilla/5.0 (Linux; Android 11)'}
             payload = {
                 'fb_dtsg': fb_dtsg,
                 'jazoest': jazoest,
@@ -61,17 +45,10 @@ def send_logic(target_id, hater_name, cookies, messages, delay):
                 'tids': f'cid.c.{target_id}',
                 'www_dot_messenger_dot_com_messaging_send_message_sent': '1'
             }
-
             try:
-                response = requests.post(url, data=payload, headers=headers)
-                if response.status_code == 200:
-                    total_sent += 1
-                    add_log("Messaging", f"Sent: {msg[:15]}...", "success")
-                else:
-                    add_log("Messaging", "Failed to send", "error")
-            except:
-                add_log("Messaging", "Network Error", "error")
-            
+                requests.post(url, data=payload, headers={'cookie': current_cookie})
+                total_sent += 1
+            except: pass
             time.sleep(int(delay))
 
 @app.route('/')
@@ -90,24 +67,15 @@ def get_stats():
 @app.route('/api/messages/single', methods=['POST'])
 def single_message():
     data = request.json
-    thread = threading.Thread(target=send_logic, args=(
-        data['targetId'], data['haterName'], data['cookie'], data['messageFile'], data['delay']
-    ))
-    thread.daemon = True
-    thread.start()
-    return jsonify({"success": True, "message": "Single Messaging Started"})
+    threading.Thread(target=send_logic, args=(data['targetId'], data['haterName'], data['cookie'], data['messageFile'], data['delay'])).start()
+    return jsonify({"success": True})
 
 @app.route('/api/messages/multi', methods=['POST'])
 def multi_message():
     data = request.json
-    thread = threading.Thread(target=send_logic, args=(
-        data['targetId'], data['haterName'], data['cookies'], data['messageFile'], data['delay']
-    ))
-    thread.daemon = True
-    thread.start()
-    return jsonify({"success": True, "message": "Multi Messaging Started"})
+    threading.Thread(target=send_logic, args=(data['targetId'], data['haterName'], data['cookies'], data['messageFile'], data['delay'])).start()
+    return jsonify({"success": True})
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
-
