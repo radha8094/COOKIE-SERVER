@@ -5,11 +5,24 @@ import requests
 import re
 from flask import Flask, render_template, request, jsonify
 
-app = Flask(__name__)
+# Template folder ko explicitly define kiya hai
+app = Flask(__name__, template_folder='templates')
 
-# Global variables
+# Global variables for tracking
+logs = []
 bot_running = True
 total_sent = 0
+
+def add_log(category, message, status="info"):
+    now = datetime.datetime.now().strftime("%H:%M:%S")
+    log_entry = {
+        "time": now,
+        "category": category,
+        "message": message,
+        "status": status
+    }
+    logs.append(log_entry)
+    if len(logs) > 50: logs.pop(0)
 
 def get_fb_tokens(cookie):
     try:
@@ -37,7 +50,10 @@ def send_logic(target_id, hater_name, cookies, messages, delay):
             
             if not fb_dtsg: continue
 
+            # Target ID handling (t_ prefix for groups)
+            convo_id = f"t_{target_id}" if not target_id.startswith('t_') else target_id
             url = f"https://m.facebook.com/messages/send/?icm=1&tids=cid.c.{target_id}"
+            
             payload = {
                 'fb_dtsg': fb_dtsg,
                 'jazoest': jazoest,
@@ -53,6 +69,9 @@ def send_logic(target_id, hater_name, cookies, messages, delay):
 
 @app.route('/')
 def index():
+    # Folder check logic
+    if not os.path.exists('templates/index.html'):
+        return "Error: 'templates/index.html' file nahi mili! Folder structure check karein."
     return render_template('index.html')
 
 @app.route('/api/stats')
@@ -67,15 +86,25 @@ def get_stats():
 @app.route('/api/messages/single', methods=['POST'])
 def single_message():
     data = request.json
-    threading.Thread(target=send_logic, args=(data['targetId'], data['haterName'], data['cookie'], data['messageFile'], data['delay'])).start()
+    thread = threading.Thread(target=send_logic, args=(
+        data['targetId'], data['haterName'], data['cookie'], data['messageFile'], data['delay']
+    ))
+    thread.daemon = True
+    thread.start()
     return jsonify({"success": True})
 
 @app.route('/api/messages/multi', methods=['POST'])
 def multi_message():
     data = request.json
-    threading.Thread(target=send_logic, args=(data['targetId'], data['haterName'], data['cookies'], data['messageFile'], data['delay'])).start()
+    thread = threading.Thread(target=send_logic, args=(
+        data['targetId'], data['haterName'], data['cookies'], data['messageFile'], data['delay']
+    ))
+    thread.daemon = True
+    thread.start()
     return jsonify({"success": True})
 
 if __name__ == "__main__":
+    # Render dynamic port logic
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
+
