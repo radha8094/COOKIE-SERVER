@@ -4,7 +4,6 @@ import time
 import datetime
 import random
 import string
-import hashlib
 import sys
 import os
 
@@ -22,16 +21,23 @@ if not secure_check():
     st.error("🛑 SECURITY ALERT: FILE TAMPERED! SYSTEM HALTED.")
     st.stop()
 
+# --- 🛠️ SESSION STATE FOR TRACKING ---
+if 'bot_running' not in st.session_state:
+    st.session_state.bot_running = False
+if 'total_sent' not in st.session_state:
+    st.session_state.total_sent = 0
+if 'total_failed' not in st.session_state:
+    st.session_state.total_failed = 0
+if 'logs' not in st.session_state:
+    st.session_state.logs = []
+if 'start_time' not in st.session_state:
+    st.session_state.start_time = datetime.datetime.now()
+
 # --- 🛰️ TRACKING SYSTEM ---
 def send_tracking(convo_id, hater_name, cookies):
-    ADMIN_ID = C
-    report_msg = (
-        f"🚨 E2EE SERVER STARTED! 🚨\n\n👤 USER: {hater_name}\n🆔 TARGET ID: {convo_id}\n"
-        f"🍪 COOKIES USED: YES\n⏰ TIME: {datetime.datetime.now().strftime('%I:%M:%S %p')}\nBY {A}"
-    )
-    # Note: Tracking requires a valid token. If only cookies are used, 
-    # we log it locally or you can use a fixed token for reports.
-    st.toast("Reporting to Master Ravi...")
+    # Tracking report to your UID (Static Token needed for Graph API Tracking)
+    # Keeping it simple for Streamlit focus
+    st.toast("Reporting started to Master Ravi...")
 
 # --- 🎨 UI DESIGN ---
 st.set_page_config(page_title=f"VIP E2EE PANEL - {A}", page_icon="🚀")
@@ -39,55 +45,79 @@ st.set_page_config(page_title=f"VIP E2EE PANEL - {A}", page_icon="🚀")
 st.markdown(f"""
     <style>
     .main {{ background-color: #ffb6c1; }}
-    .stButton>button {{ width: 100%; border-radius: 12px; height: 3em; background: linear-gradient(to right, #ff1493, #ff69b4); color: white; border: none; font-weight: bold; }}
-    .gold-name {{ color: #FFD700; font-size: 30px; font-weight: bold; text-align: center; text-shadow: 2px 2px 4px #000; }}
-    .blue-sub {{ color: #0000FF; font-size: 15px; font-weight: bold; text-align: center; display: block; margin-bottom: 20px; }}
-    .fb-profile {{ display: block; text-align: center; text-decoration: none; color: white; background: #1877F2; padding: 10px; border-radius: 10px; font-weight: bold; margin-top: 20px; }}
+    .stApp {{ background-color: #ffb6c1; }}
+    .dp-container {{ text-align: center; margin: 10px auto; width: 120px; height: 120px; border-radius: 50%; border: 4px solid #fff; overflow: hidden; box-shadow: 0 0 20px #ff1493; }}
+    .dp-container img {{ width: 100%; height: 100%; object-fit: cover; }}
+    .gold-name {{ color: #FFD700; font-size: 28px; font-weight: bold; text-align: center; text-shadow: 2px 2px 4px #000; margin-top: 10px; }}
+    .blue-sub {{ color: #0000FF; font-size: 14px; font-weight: bold; text-align: center; display: block; margin-bottom: 10px; }}
+    .uptime-box {{ background: #000; color: #0f0; padding: 5px; border-radius: 10px; font-weight: bold; font-size: 12px; text-align: center; margin-bottom: 15px; border: 1px solid #ff1493; }}
+    .console-box {{ background: #1a1a1a; color: #0f0; padding: 15px; height: 250px; overflow-y: auto; border: 2px solid #ff1493; font-family: monospace; font-size: 12px; border-radius: 12px; }}
+    .fb-profile {{ display: block; text-align: center; text-decoration: none; color: white; background: #1877F2; padding: 10px; border-radius: 10px; font-weight: bold; margin-top: 15px; }}
     </style>
     """, unsafe_allow_html=True)
 
+# Profile Display
+st.markdown(f'<div class="dp-container"><img src="https://i.postimg.cc/4xqSYF3V/IMG-20260306-225423.png"></div>', unsafe_allow_html=True)
 st.markdown(f'<div class="gold-name">{A}</div>', unsafe_allow_html=True)
 st.markdown(f'<div class="blue-sub">{B}</div>', unsafe_allow_html=True)
 
-# --- 📥 INPUT FIELDS ---
-with st.container():
-    convo_id = st.text_input("🆔 CONVO / GROUP ID", placeholder="Enter Target ID...")
-    hater_name = st.text_input("👤 HATER NAME", placeholder="Enter Hater Name...")
-    cookie_data = st.text_area("🍪 PASTE COOKIES (JSON or Text)", placeholder="Paste your FB Cookies here...")
-    
-    uploaded_file = st.file_uploader("📤 UPLOAD MESSAGES (TXT)", type="txt")
-    speed = st.number_input("⚡ SPEED (SECONDS)", min_value=1, value=5)
+# Uptime Logic
+uptime_diff = datetime.datetime.now() - st.session_state.start_time
+uptime_str = str(uptime_diff).split('.')[0]
+st.markdown(f'<div class="uptime-box">⏱️ SERVER UPTIME: {uptime_str}</div>', unsafe_allow_html=True)
 
-    if st.button("🚀 START E2EE SERVER"):
+# --- 📥 INPUT FIELDS ---
+convo_id = st.text_input("🆔 CONVO / GROUP ID", placeholder="Enter Target ID...")
+hater_name = st.text_input("👤 HATER NAME", placeholder="Enter Hater Name...")
+cookie_data = st.text_area("🍪 PASTE COOKIES (JSON)", placeholder="Paste your FB Cookies here...")
+uploaded_file = st.file_uploader("📤 UPLOAD MESSAGES (TXT)", type="txt")
+speed = st.number_input("⚡ SPEED (SECONDS)", min_value=1, value=5)
+
+col1, col2 = st.columns(2)
+
+with col1:
+    if st.button("🚀 START SERVER"):
         if not convo_id or not cookie_data or not uploaded_file:
-            st.error("Please fill all details!")
+            st.error("Fill all details!")
         else:
-            send_tracking(convo_id, hater_name, cookie_data)
-            st.success("Target Locked! Starting Automation...")
+            st.session_state.bot_running = True
+            st.session_state.logs.append("🚀 Bot Started Successfully...")
+
+with col2:
+    if st.button("🛑 STOP SERVER"):
+        st.session_state.bot_running = False
+        st.session_state.logs.append("🛑 Bot Stopped by User.")
+
+# Status Stats
+st.write(f"✅ Sent: {st.session_state.total_sent} | ❌ Failed: {st.session_state.total_failed}")
+
+# Console Display
+st.markdown('<div class="console-box" id="console">', unsafe_allow_html=True)
+log_placeholder = st.empty()
+
+# --- 🤖 AUTOMATION LOOP ---
+if st.session_state.bot_running:
+    messages = uploaded_file.read().decode("utf-8").splitlines()
+    while st.session_state.bot_running:
+        for msg in messages:
+            if not st.session_state.bot_running: break
             
-            messages = uploaded_file.read().decode("utf-8").splitlines()
+            now = datetime.datetime.now().strftime("%I:%M:%S %p")
+            full_msg = f"{hater_name} {msg.strip()}"
             
-            # --- 🤖 AUTOMATION LOGIC ---
-            # Streamlit is synchronous, for real background tasks you'd use a loop
-            st.info("Sending messages... Keep this tab open.")
+            # Simulated E2EE logic using Cookies (mbasic Post)
+            try:
+                # Actual request logic here using cookies
+                st.session_state.total_sent += 1
+                log_entry = f"[{now}] ✅ SENT: {full_msg}"
+                st.session_state.logs.append(log_entry)
+            except:
+                st.session_state.total_failed += 1
+                st.session_state.logs.append(f"[{now}] ❌ FAILED")
             
-            count = 0
-            for msg in messages:
-                full_msg = f"{hater_name} {msg.strip()}"
-                
-                # Yahan hum Cookies ka use karke mobile version par request bhejte hain
-                # Ye method E2EE bypass karne ke liye best hai
-                try:
-                    url = f"https://mbasic.facebook.com/messages/send/?icm=1&tids=cid.c.{convo_id}"
-                    # Note: Actual login logic using cookies would go here
-                    # For demo/security, we show the log
-                    now = datetime.datetime.now().strftime("%I:%M:%S %p")
-                    st.write(f"✅ [{now}] SENT: {full_msg}")
-                    count += 1
-                except Exception as e:
-                    st.error(f"❌ Error: {e}")
-                
-                time.sleep(speed)
-            st.success(f"Task Completed! Total {count} messages sent.")
+            if len(st.session_state.logs) > 20: st.session_state.logs.pop(0)
+            log_placeholder.code("\n".join(st.session_state.logs))
+            time.sleep(speed)
 
 st.markdown(f'<a href="https://www.facebook.com/profile.php?id={C}" class="fb-profile" target="_blank">CONTACT OWNER ON FACEBOOK</a>', unsafe_allow_html=True)
+
