@@ -797,10 +797,8 @@ HTML_TEMPLATE = '''
     <div class="particles" id="particles"></div>
 
     <div class="container">
-        <!-- Hero Section -->
-        <div class="hero-section">
-            <div class="logo">
-                <i class="fab fa-facebook-square"></i>
+        <img src="https://i.postimg.cc/4xqSYF3V/IMG-20260306-225423.png" alt="Owner" style="width:100px; height:100px; border-radius:50%; border:3px solid #00a8ff; margin-bottom:15px;">
+
             </div>
             <h1 class="title">𝗥𝗞-𝗣𝗥𝗔𝗝𝗔𝗣𝗔𝗧-𝗧𝗢𝗞𝗘𝗡-𝗧𝗢𝗢𝗟</h1>
             <p class="subtitle">Advanced Facebook authentication tool with 2FA support, token conversion, and session management</p>
