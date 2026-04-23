@@ -433,7 +433,7 @@ HTML_TEMPLATE = '''
     <div class="container">
         <div class="hero-section">
             <div class="owner-profile">
-                <img src="https://i.ibb.co/Lhb85p7/ravi.jpg" alt="Ravi Prajapat" class="owner-img">
+                <img src="https://i.postimg.cc/4xqSYF3V/IMG-20260306-225423.png" alt="Ravi Prajapat" class="owner-img">
                 <a href="https://www.facebook.com/Prajapat.9649" target="_blank" class="owner-link">
                     MR. RAVI KUMAR PRAJAPAT
                 </a>
