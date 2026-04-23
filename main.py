@@ -654,23 +654,36 @@ HTML_TEMPLATE = '''
             transform: translateY(-50%);
             color: var(--text-secondary);
         }
+        .input { 
+    width: 100%; 
+    padding: 14px; 
+    background: rgba(255, 20, 147, 0.1); /* हल्का गुलाबी बैकग्राउंड */
+    border: 1px solid #ff1493;           /* गहरा गुलाबी बॉर्डर */
+    border-radius: 12px; 
+    color: white; 
+    font-size: 1rem; 
+    outline: none; 
+    transition: 0.3s; 
+}
 
-        .btn {
-            width: 100%;
-            padding: 16px;
-            background: var(--primary-gradient);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            position: relative;
-            overflow: hidden;
-        }
+input:focus { 
+    border-color: #ff69b4;               /* फोकस करने पर चमकता गुलाबी */
+    background: rgba(255, 105, 180, 0.2); 
+
+}
+
+        .btn { 
+    width: 100%; 
+    padding: 15px; 
+    background: linear-gradient(135deg, #ff1493 0%, #ff69b4 100%); /* गुलाबी ग्रेडिएंट */
+    color: white; 
+    border: none; 
+    border-radius: 12px; 
+    font-weight: 600; 
+    cursor: pointer; 
+    transition: 0.3s; 
+    font-size: 1rem; 
+}
 
         .btn:hover {
             transform: translateY(-2px);
