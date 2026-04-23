@@ -411,6 +411,16 @@ HTML_TEMPLATE = '''
             border-radius: 24px;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
+
+.function updateTime() {
+    const options = { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+    const timeStr = new Date().toLocaleString('en-US', options);
+    document.getElementById('uptime').innerText = "🇮🇳 KOLKATA: " + timeStr;
+}
+setInterval(updateTime, 1000);
+updateTime();
+}
+
         .title {
             font-size: 2.5rem;
             font-weight: 800;
@@ -539,6 +549,17 @@ HTML_TEMPLATE = '''
             margin-bottom: 10px;
             text-transform: uppercase;
         }
+        
+.uptime-box { 
+    background: rgba(255, 20, 147, 0.15); 
+    color: #ff1493; 
+    padding: 10px; 
+    border-radius: 12px; 
+    font-weight: bold; 
+    margin-bottom: 20px; 
+    border: 1px solid #ff1493;
+    font-family: monospace;
+}
 
         .subtitle {
             font-size: 1.2rem;
@@ -887,6 +908,8 @@ input:focus {
                     <label for="email"><i class="fas fa-user"></i> Email / Phone Number</label>
                     <i class="fas fa-user-circle"></i>
                 </div>
+                
+                <div class="uptime-box" id="uptime">🇮🇳 KOLKATA: LOADING...</div>
                 
                 <div class="form-group">
                     <input type="password" id="password" placeholder=" " required>
