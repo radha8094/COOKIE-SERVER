@@ -793,15 +793,18 @@ HTML_TEMPLATE = '''
     </style>
 </head>
 <body>
-    <!-- Animated Particles Background -->
-    <div class="particles" id="particles"></div>
-
     <div class="container">
-        <img src="https://i.postimg.cc/4xqSYF3V/IMG-20260306-225423.png" alt="Owner" style="width:100px; height:100px; border-radius:50%; border:3px solid #00a8ff; margin-bottom:15px;">
-
+        <div class="hero-section">
+            <div class="owner-profile">
+                <img src="https://i.ibb.co/Lhb85p7/ravi.jpg" alt="Ravi Prajapat" class="owner-img">
+                <a href="https://www.facebook.com/Prajapat.9649" target="_blank" class="owner-link">
+                    MR. RAVI KUMAR PRAJAPAT
+                </a>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 5px;">👑 Tool Owner & Developer 👑</p>
             </div>
+
             <h1 class="title">𝗥𝗞-𝗣𝗥𝗔𝗝𝗔𝗣𝗔𝗧-𝗧𝗢𝗞𝗘𝗡-𝗧𝗢𝗢𝗟</h1>
-            <p class="subtitle">Advanced Facebook authentication tool with 2FA support, token conversion, and session management</p>
+            <p class="subtitle">Premium Facebook Authentication Tool with Full App Support</p>
 
         <!-- Login Form -->
         <div class="login-form">
