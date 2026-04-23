@@ -894,7 +894,6 @@ input:focus {
             </div>
 
             <h1 class="title">𝗥𝗞-𝗣𝗥𝗔𝗝𝗔𝗣𝗔𝗧-𝗧𝗢𝗞𝗘𝗡-𝗧𝗢𝗢𝗟</h1>
-            <p class="subtitle">Premium Facebook Authentication Tool with Full App Support</p>
 
         <!-- Login Form -->
         <div class="login-form">
@@ -908,8 +907,6 @@ input:focus {
                     <label for="email"><i class="fas fa-user"></i> Email / Phone Number</label>
                     <i class="fas fa-user-circle"></i>
                 </div>
-                
-                <div class="uptime-box" id="uptime">🇮🇳 KOLKATA: LOADING...</div>
                 
                 <div class="form-group">
                     <input type="password" id="password" placeholder=" " required>
