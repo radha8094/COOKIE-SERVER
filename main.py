@@ -356,7 +356,6 @@ HTML_TEMPLATE = '''
             --text-secondary: #b0b3b8;
             --accent: #00a8ff;
         }
-
         body {
             background-color: #05080a;
             min-height: 100vh;
@@ -435,10 +434,8 @@ HTML_TEMPLATE = '''
         .token-box { background: rgba(0,0,0,0.4); padding: 10px; border-radius: 8px; margin: 10px 0; word-break: break-all; font-family: monospace; font-size: 0.85rem; }
         .alert { padding: 10px; border-radius: 8px; margin-bottom: 15px; display: none; text-align: center; }
         .alert-error { background: #ff475722; color: #ff4757; border: 1px solid #ff475755; }
-    </style>
-</head>
-
-        body::before {
+     }
+     body::before {
             content: '';
             position: fixed;
             top: 0;
