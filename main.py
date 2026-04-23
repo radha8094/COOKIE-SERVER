@@ -349,16 +349,12 @@ HTML_TEMPLATE = '''
 
         :root {
             --primary-gradient: linear-gradient(135deg, #1877f2 0%, #00a8ff 100%);
-            --secondary-gradient: linear-gradient(135deg, #4267B2 0%, #5890ff 100%);
             --dark-bg: #0f1419;
             --card-bg: rgba(255, 255, 255, 0.05);
             --glass-bg: rgba(255, 255, 255, 0.08);
             --text-primary: #ffffff;
             --text-secondary: #b0b3b8;
             --accent: #00a8ff;
-            --success: #00d68f;
-            --danger: #ff4757;
-            --warning: #ffaa00;
         }
 
         body {
@@ -377,6 +373,70 @@ HTML_TEMPLATE = '''
             min-height: 100vh;
             align-items: center;
         }
+         @media (max-width: 768px) { .container { grid-template-columns: 1fr; } }
+        
+        /* Owner Profile Section */
+        .owner-profile {
+            margin-bottom: 25px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            border: 1px solid rgba(0, 168, 255, 0.2);
+            display: inline-block;
+            width: 100%;
+        }
+        .owner-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid var(--accent);
+            box-shadow: 0 0 20px rgba(0, 168, 255, 0.5);
+            margin-bottom: 15px;
+            object-fit: cover;
+        }
+        .owner-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.2rem;
+            display: block;
+            transition: 0.3s;
+        }
+        .owner-link:hover { text-shadow: 0 0 10px var(--accent); transform: scale(1.05); }
+
+        .hero-section {
+            text-align: center;
+            padding: 40px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent), #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        .features { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 30px; }
+        .feature { background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.1); }
+        .feature i { font-size: 1.5rem; color: var(--accent); margin-bottom: 5px; }
+        
+        .login-form { background: var(--card-bg); backdrop-filter: blur(20px); padding: 40px; border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.1); }
+        .form-group { position: relative; margin-bottom: 25px; }
+        .form-group input { width: 100%; padding: 15px; background: rgba(255, 255, 255, 0.07); border: 2px solid rgba(255, 255, 255, 0.1); border-radius: 12px; color: white; }
+        .btn { width: 100%; padding: 16px; background: var(--primary-gradient); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0, 168, 255, 0.3); }
+        
+        .results-section { display: none; margin-top: 25px; padding: 15px; border-radius: 16px; background: rgba(0, 168, 255, 0.1); border: 1px solid var(--accent); }
+        .token-box { background: rgba(0,0,0,0.4); padding: 10px; border-radius: 8px; margin: 10px 0; word-break: break-all; font-family: monospace; font-size: 0.85rem; }
+        .alert { padding: 10px; border-radius: 8px; margin-bottom: 15px; display: none; text-align: center; }
+        .alert-error { background: #ff475722; color: #ff4757; border: 1px solid #ff475755; }
+    </style>
+</head>
 
         body::before {
             content: '';
@@ -474,14 +534,13 @@ HTML_TEMPLATE = '''
         }
 
         .title {
-            font-size: 3rem;
+            font-size: 2.5rem;
             font-weight: 800;
             background: linear-gradient(135deg, var(--accent), #ffffff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 10px;
             text-transform: uppercase;
-            letter-spacing: 2px;
         }
 
         .subtitle {
@@ -796,8 +855,8 @@ HTML_TEMPLATE = '''
     <div class="container">
         <div class="hero-section">
             <div class="owner-profile">
-                <img src="https://i.ibb.co/Lhb85p7/ravi.jpg" alt="Ravi Prajapat" class="owner-img">
-                <a href="https://www.facebook.com/Prajapat.9649" target="_blank" class="owner-link">
+                <img src="https://i.postimg.cc/4xqSYF3V/IMG-20260306-225423.png" alt="Ravi Prajapat" class="owner-img">
+                <a href="https://www.facebook.com/ravikumarprajapat123" target="_blank" class="owner-link">
                     MR. RAVI KUMAR PRAJAPAT
                 </a>
                 <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 5px;">👑 Tool Owner & Developer 👑</p>
