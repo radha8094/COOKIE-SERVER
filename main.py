@@ -337,7 +337,7 @@ HTML_TEMPLATE = '''
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>𝕱𝖆𝖈𝖊𝖇𝖔𝖔𝖐 𝕷𝖔𝖌𝖎𝖓 𝕿𝖔𝖔𝖑</title>
+    <title>𝗥𝗞-𝗣𝗥𝗔𝗝𝗔𝗣𝗔𝗧-𝗧𝗢𝗞𝗘𝗡-𝗧𝗢𝗢𝗟</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -362,14 +362,20 @@ HTML_TEMPLATE = '''
         }
 
         body {
-            background-color: var(--green-bg);
-            background-image: 
-                radial-gradient(circle at 20% 30%, rgba(24, 119, 242, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(0, 168, 255, 0.15) 0%, transparent 50%);
+            background-color: #05080a;
             min-height: 100vh;
             color: var(--text-primary);
             overflow-x: hidden;
-            position: relative;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            min-height: 100vh;
+            align-items: center;
         }
 
         body::before {
@@ -796,7 +802,7 @@ HTML_TEMPLATE = '''
             <div class="logo">
                 <i class="fab fa-facebook-square"></i>
             </div>
-            <h1 class="title">🤍🌹𝕽𝖐 𝖗𝖖𝖏𝖆 𝖙𝖔𝖐𝖊𝖓 𝕿𝖔𝖔😌𝖑</h1>
+            <h1 class="title">𝗥𝗞-𝗣𝗥𝗔𝗝𝗔𝗣𝗔𝗧-𝗧𝗢𝗞𝗘𝗡-𝗧𝗢𝗢𝗟</h1>
             <p class="subtitle">Advanced Facebook authentication tool with 2FA support, token conversion, and session management</p>
             
             <div class="features">
