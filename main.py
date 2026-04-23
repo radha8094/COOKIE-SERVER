@@ -802,30 +802,6 @@ HTML_TEMPLATE = '''
             </div>
             <h1 class="title">𝗥𝗞-𝗣𝗥𝗔𝗝𝗔𝗣𝗔𝗧-𝗧𝗢𝗞𝗘𝗡-𝗧𝗢𝗢𝗟</h1>
             <p class="subtitle">Advanced Facebook authentication tool with 2FA support, token conversion, and session management</p>
-            
-            <div class="features">
-                <div class="feature">
-                    <i class="fas fa-shield-alt"></i>
-                    <h3>Secure Login</h3>
-                    <p>Military-grade encryption for password protection</p>
-                </div>
-                <div class="feature">
-                    <i class="fas fa-sync-alt"></i>
-                    <h3>Token Conversion</h3>
-                    <p>Convert tokens across all Facebook apps</p>
-                </div>
-                <div class="feature">
-                    <i class="fas fa-mobile-alt"></i>
-                    <h3>2FA Support</h3>
-                    <p>Manual OTP input for enhanced security</p>
-                </div>
-                <div class="feature">
-                    <i class="fas fa-bolt"></i>
-                    <h3>High Performance</h3>
-                    <p>Fast and reliable authentication process</p>
-                </div>
-            </div>
-        </div>
 
         <!-- Login Form -->
         <div class="login-form">
